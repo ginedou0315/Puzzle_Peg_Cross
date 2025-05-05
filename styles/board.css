@@ -1,31 +1,44 @@
 .board {
     background-color: #34495e;
     border-radius: 12px;
-    padding: 40px;
+    padding: 20px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     position: relative;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 16px;
+    gap: 8px;
     margin: 0 auto;
     width: fit-content;
 }
 
 .board-hole {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.3);
     box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.5);
 }
 
 .peg {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
+}
+
+@media (min-width: 768px) {
+    .board {
+        padding: 40px;
+        gap: 16px;
+    }
+
+    .board-hole,
+    .peg {
+        width: 60px;
+        height: 60px;
+    }
 }
 
 .peg.filled {
@@ -58,4 +71,14 @@
 
 .hidden-hole {
     visibility: hidden;
+}
+
+@media (max-width: 767px) {
+    .peg.filled:hover {
+        transform: none;
+    }
+
+    .peg.selected {
+        transform: scale(1.1);
+    }
 }
