@@ -9,47 +9,80 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    padding: 1rem;
 }
 
 .tutorial-content {
     background: white;
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 12px;
+    width: 100%;
     max-width: 500px;
-    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .tutorial-content h2 {
     color: #2c3e50;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin-bottom: 1rem;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .tutorial-content {
+        padding: 2rem;
+    }
+
+    .tutorial-content h2 {
+        font-size: 1.5rem;
+    }
 }
 
 .tutorial-steps {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .tutorial-steps p {
     margin: 0.5rem 0;
     color: #34495e;
+    font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+    .tutorial-steps p {
+        font-size: 1rem;
+    }
 }
 
 .tutorial-tips {
     background: #f7f9fc;
     padding: 1rem;
     border-radius: 8px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .tutorial-tips h3 {
     color: #2c3e50;
     margin-bottom: 0.5rem;
+    font-size: 1rem;
 }
 
 .tutorial-tips ul {
     list-style-type: disc;
     margin-left: 1.5rem;
     color: #34495e;
+    font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+    .tutorial-tips h3 {
+        font-size: 1.125rem;
+    }
+
+    .tutorial-tips ul {
+        font-size: 1rem;
+    }
 }
 
 .close-tutorial {
@@ -60,6 +93,13 @@
     border: none;
     cursor: pointer;
     transition: background 0.3s;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .close-tutorial {
+        width: auto;
+    }
 }
 
 .close-tutorial:hover {
