@@ -1,93 +1,44 @@
 .board {
     background-color: #34495e;
     border-radius: 12px;
-    padding: 20px;
+    padding: 40px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    transform-style: preserve-3d;
-    transition: transform 0.1s ease;
-    cursor: grab;
     position: relative;
-}
-
-.board:active {
-    cursor: grabbing;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 16px;
+    margin: 0 auto;
+    width: fit-content;
 }
 
 .board-hole {
-    width: 35px;
-    height: 35px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.3);
     box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.5);
-    transform: translateZ(-5px);
 }
 
 .peg {
-    width: 35px;
-    height: 35px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
-    transform-style: preserve-3d;
 }
 
 .peg.filled {
+    background: #3498db;
     box-shadow: 
         0 4px 8px rgba(0, 0, 0, 0.3),
         inset 0 -2px 4px rgba(0, 0, 0, 0.2),
         inset 0 2px 4px rgba(255, 255, 255, 0.2);
-    transform: translateZ(12px);
 }
 
 .peg.filled:hover {
-    transform: translateZ(16px);
+    transform: scale(1.1);
     filter: brightness(1.2);
-}
-
-.peg.filled.player-1 {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    box-shadow: 
-        0 4px 8px rgba(231, 76, 60, 0.4),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
-        inset 0 2px 4px rgba(255, 255, 255, 0.2),
-        0 0 20px rgba(231, 76, 60, 0.4);
-}
-
-.peg.filled.player-2 {
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    box-shadow: 
-        0 4px 8px rgba(52, 152, 219, 0.4),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
-        inset 0 2px 4px rgba(255, 255, 255, 0.2),
-        0 0 20px rgba(52, 152, 219, 0.4);
-}
-
-.peg.filled.player-3 {
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    box-shadow: 
-        0 4px 8px rgba(46, 204, 113, 0.4),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
-        inset 0 2px 4px rgba(255, 255, 255, 0.2),
-        0 0 20px rgba(46, 204, 113, 0.4);
-}
-
-.peg.filled.player-4 {
-    background: linear-gradient(135deg, #f1c40f, #f39c12);
-    box-shadow: 
-        0 4px 8px rgba(241, 196, 15, 0.4),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
-        inset 0 2px 4px rgba(255, 255, 255, 0.2),
-        0 0 20px rgba(241, 196, 15, 0.4);
-}
-
-.peg.filled.center {
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
-    box-shadow: 
-        0 4px 8px rgba(155, 89, 182, 0.4),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
-        inset 0 2px 4px rgba(255, 255, 255, 0.2),
-        0 0 20px rgba(155, 89, 182, 0.4);
 }
 
 .peg.empty {
@@ -95,7 +46,7 @@
 }
 
 .peg.selected {
-    transform: translateZ(20px) scale(1.1);
+    transform: scale(1.15);
     box-shadow: 
         0 8px 16px rgba(0, 0, 0, 0.4),
         inset 0 -2px 4px rgba(0, 0, 0, 0.2),
@@ -103,115 +54,6 @@
         0 0 30px rgba(255, 255, 255, 0.6);
     filter: brightness(1.3);
     z-index: 10;
-}
-
-.peg.selected::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    animation: selectedPulse 1.5s infinite;
-}
-
-.peg.valid-move {
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    animation: validMovePulse 1.5s infinite;
-    box-shadow: 
-        0 6px 12px rgba(46, 204, 113, 0.4),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
-        inset 0 2px 4px rgba(255, 255, 255, 0.2),
-        0 0 25px rgba(46, 204, 113, 0.6);
-}
-
-.peg::after {
-    content: '';
-    position: absolute;
-    top: 20%;
-    left: 20%;
-    width: 30%;
-    height: 30%;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-}
-
-.player-label {
-    position: absolute;
-    color: white;
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    transform-style: preserve-3d;
-    pointer-events: none;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 4px 12px;
-    border-radius: 8px;
-}
-
-.player-label.top {
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%) translateZ(10px);
-}
-
-.player-label.bottom {
-    bottom: -40px;
-    left: 50%;
-    transform: translateX(-50%) translateZ(10px);
-}
-
-.player-label.left {
-    left: -40px;
-    top: 50%;
-    transform: translateY(-50%) translateZ(10px);
-}
-
-.player-label.right {
-    right: -40px;
-    top: 50%;
-    transform: translateY(-50%) translateZ(10px);
-}
-
-.no-moves-notification {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(231, 76, 60, 0.9);
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    font-weight: bold;
-    animation: fadeInOut 2s forwards;
-    z-index: 100;
-}
-
-@keyframes fadeInOut {
-    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
-    20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
-}
-
-@keyframes selectedPulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.7; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes validMovePulse {
-    0% {
-        transform: translateZ(12px) scale(1);
-    }
-    50% {
-        transform: translateZ(16px) scale(1.05);
-    }
-    100% {
-        transform: translateZ(12px) scale(1);
-    }
 }
 
 .hidden-hole {
