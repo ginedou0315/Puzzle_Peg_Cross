@@ -1,15 +1,15 @@
 .high-scores-container {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 12px;
     width: 100%;
 }
 
 .high-scores-container h2 {
     color: white;
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
     text-align: center;
 }
 
@@ -21,13 +21,32 @@
 
 .score-item {
     display: grid;
-    grid-template-columns: 30px 1fr auto auto auto;
-    gap: 1rem;
+    grid-template-columns: 25px 1fr auto;
+    gap: 0.5rem;
     align-items: center;
-    padding: 8px 16px;
+    padding: 0.5rem;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 6px;
     color: white;
+    font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+    .high-scores-container {
+        padding: 1.5rem;
+    }
+
+    .high-scores-container h2 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .score-item {
+        grid-template-columns: 30px 1fr auto auto auto;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
 }
 
 .score-item .rank {
@@ -49,10 +68,25 @@
 }
 
 .score-item .moves {
-    color: #e74c3c;
+    display: none;
 }
 
 .score-item .avg-time {
-    font-family: 'Courier New', monospace;
-    color: #f1c40f;
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .score-item .moves,
+    .score-item .avg-time {
+        display: block;
+    }
+
+    .score-item .moves {
+        color: #e74c3c;
+    }
+
+    .score-item .avg-time {
+        font-family: 'Courier New', monospace;
+        color: #f1c40f;
+    }
 }
