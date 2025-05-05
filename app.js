@@ -11,10 +11,10 @@ function App() {
         const [elapsedTime, setElapsedTime] = React.useState(0);
         const [highScores, setHighScores] = React.useState([]);
 
-        // Fetch high scores on mount
+        // Fetch high scores on mount and when game state changes
         React.useEffect(() => {
             fetchHighScores();
-        }, []);
+        }, [gameStarted]);
 
         React.useEffect(() => {
             let timer;
@@ -136,7 +136,7 @@ function App() {
         return (
             <div data-name="game-container" className="min-h-screen flex flex-col p-4 bg-gradient-to-br from-blue-900 to-purple-900">
                 {!gameStarted ? (
-                    <div data-name="start-screen" className="flex flex-col items-center justify-center h-screen">
+                    <div data-name="start-screen" className="flex flex-col items-center justify-center min-h-screen py-8">
                         <h1 className="text-4xl font-bold text-white mb-8">Puzzle Pegs Cross</h1>
                         <div className="text-white text-center mb-8">
                             <p className="text-lg mb-4">Goal: Remove pegs by jumping over them until only one peg remains.</p>
@@ -149,7 +149,7 @@ function App() {
                                 <li>Plan your moves carefully to avoid getting stuck!</li>
                             </ul>
                         </div>
-                        <form onSubmit={handleStartGame} className="flex flex-col items-center gap-4">
+                        <form onSubmit={handleStartGame} className="flex flex-col items-center gap-4 mb-8">
                             <input
                                 type="text"
                                 value={playerName}
@@ -166,6 +166,12 @@ function App() {
                                 Start Game
                             </button>
                         </form>
+                        
+                        {highScores.length > 0 && (
+                            <div className="w-full max-w-screen-xl">
+                                <HighScores scores={highScores} />
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div data-name="game-content" className="flex flex-col items-center mt-8">
