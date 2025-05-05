@@ -13,7 +13,6 @@ function HighScores({ scores }) {
                                 <span className="name">{score.name}</span>
                                 <span className="time">{formatTime(Math.floor(score.time / 1000))}</span>
                                 <span className="moves">{score.moves} moves</span>
-                                <span className="avg-time">{Math.round(score.avgMoveTime / 1000)}s/move</span>
                             </div>
                         ))
                     )}
