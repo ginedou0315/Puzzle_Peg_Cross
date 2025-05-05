@@ -7,16 +7,14 @@ function App() {
         const [validMoves, setValidMoves] = React.useState([]);
         const [moves, setMoves] = React.useState(0);
         const [showTutorial, setShowTutorial] = React.useState(true);
-        const [showSolution, setShowSolution] = React.useState(false);
         const [startTime, setStartTime] = React.useState(null);
         const [elapsedTime, setElapsedTime] = React.useState(0);
         const [highScores, setHighScores] = React.useState([]);
-        const [gameStats, setGameStats] = React.useState({
-            gamesPlayed: 0,
-            wins: 0,
-            totalMoves: 0,
-            totalTime: 0
-        });
+
+        // Fetch high scores on mount
+        React.useEffect(() => {
+            fetchHighScores();
+        }, []);
 
         React.useEffect(() => {
             let timer;
@@ -28,15 +26,35 @@ function App() {
             return () => clearInterval(timer);
         }, [startTime]);
 
+        const fetchHighScores = async () => {
+            try {
+                const response = await trickleListObjects('pegs-cross-scores', 10, true);
+                const scores = response.items.map(item => ({
+                    name: item.objectData.name,
+                    moves: item.objectData.moves,
+                    time: item.objectData.time
+                }));
+                setHighScores(scores);
+            } catch (error) {
+                console.error('Error fetching high scores:', error);
+            }
+        };
+
+        const resetGame = () => {
+            setBoard(createInitialBoard());
+            setMoves(0);
+            setSelectedPeg(null);
+            setValidMoves([]);
+            setStartTime(null);
+            setElapsedTime(0);
+            setShowTutorial(false);
+        };
+
         const handleStartGame = (e) => {
             e.preventDefault();
             if (playerName.trim()) {
                 setGameStarted(true);
-                setBoard(createInitialBoard());
-                setMoves(0);
-                setShowTutorial(true);
-                setStartTime(null);
-                setElapsedTime(0);
+                resetGame();
             }
         };
 
@@ -74,39 +92,45 @@ function App() {
             }
         };
 
-        const handleWin = () => {
+        const handleWin = async () => {
             const finalTime = Date.now() - startTime;
             playWinSound();
-            const newScore = {
-                name: playerName,
-                time: finalTime,
-                moves: moves,
-                avgMoveTime: Math.round(finalTime / moves)
-            };
             
-            setHighScores(prevScores => {
-                const updatedScores = [...prevScores, newScore]
-                    .sort((a, b) => a.time - b.time)
-                    .slice(0, 10);
-                localStorage.setItem('pegsCrossHighScores', JSON.stringify(updatedScores));
-                return updatedScores;
-            });
+            try {
+                // Save score to Trickle database
+                await trickleCreateObject('pegs-cross-scores', {
+                    name: playerName,
+                    moves: moves,
+                    time: finalTime
+                });
 
-            setGameStats(prev => ({
-                gamesPlayed: prev.gamesPlayed + 1,
-                wins: prev.wins + 1,
-                totalMoves: prev.totalMoves + moves,
-                totalTime: prev.totalTime + finalTime
-            }));
-            
-            alert("Congratulations! You've won!");
-            setGameStarted(false);
+                // Refresh high scores
+                await fetchHighScores();
+            } catch (error) {
+                console.error('Error saving score:', error);
+            }
+
+            alert(`Congratulations! You completed the game in ${moves} moves!`);
+            const playAgain = window.confirm("Would you like to play again?");
+
+            if (playAgain) {
+                resetGame();
+            } else {
+                setGameStarted(false);
+            }
         };
 
         const handleGameOver = () => {
             playInvalidSound();
-            alert("No more valid moves available! Game Over!");
-            setGameStarted(false);
+            const playAgain = window.confirm(
+                "No more valid moves available! Would you like to try again?"
+            );
+
+            if (playAgain) {
+                resetGame();
+            } else {
+                setGameStarted(false);
+            }
         };
 
         return (
@@ -160,33 +184,23 @@ function App() {
                             <div className="mt-6 px-8 pb-6">
                                 <GameControls
                                     moves={moves}
-                                    onReset={() => {
-                                        setBoard(createInitialBoard());
-                                        setMoves(0);
-                                        setSelectedPeg(null);
-                                        setValidMoves([]);
-                                        setStartTime(null);
-                                        setElapsedTime(0);
-                                    }}
+                                    onReset={resetGame}
                                     canUndo={false}
                                     onUndo={() => {}}
                                 />
                             </div>
                         </div>
 
-                        <div className="flex justify-center gap-8 mt-8 w-full max-w-screen-xl">
-                            <GameStats stats={gameStats} />
-                            <HighScores scores={highScores} />
-                        </div>
+                        {highScores.length > 0 && (
+                            <div className="mt-8 w-full max-w-screen-xl">
+                                <HighScores scores={highScores} />
+                            </div>
+                        )}
                     </div>
                 )}
 
                 {showTutorial && gameStarted && (
                     <Tutorial onClose={() => setShowTutorial(false)} />
-                )}
-
-                {showSolution && (
-                    <SolutionGuide onClose={() => setShowSolution(false)} />
                 )}
             </div>
         );
