@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Play the traditional Czech Puzzle Pegs Cross game - a challenging puzzle where you jump pegs to remove them until only one remains">
-    <meta name="keywords" content="puzzle game, pegs cross, brain teaser, strategy game, board game, Czech game">
+    <meta name="description" content="Play the traditional Czech Puzzle Pegs Cross game - a challenging puzzle with multiple difficulty levels">
+    <meta name="keywords" content="puzzle game, pegs cross, brain teaser, strategy game, board game, Czech game, difficulty levels">
     <meta property="og:title" content="Czech Puzzle Pegs Cross Game">
     <meta property="og:description" content="Challenge yourself with the traditional Czech Puzzle Pegs Cross game">
     <meta property="og:type" content="website">
@@ -23,6 +23,9 @@
     <!-- Custom Styles -->
     <link href="styles/game.css" rel="stylesheet">
     <link href="styles/board.css" rel="stylesheet">
+    <link href="styles/tutorial.css" rel="stylesheet">
+    <link href="styles/stats.css" rel="stylesheet">
+    <link href="styles/highScores.css" rel="stylesheet">
 
     <style>
         body {
@@ -33,6 +36,11 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
     </style>
+
+    <!-- Audio Assets -->
+    <audio id="moveSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+    <audio id="invalidSound" src="https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3" preload="auto"></audio>
+    <audio id="winSound" src="https://assets.mixkit.co/active_storage/sfx/2573/2573-preview.mp3" preload="auto"></audio>
 </head>
 <body>
     <div id="root"></div>
@@ -41,11 +49,17 @@
     <script type="text/babel" src="components/Peg.js"></script>
     <script type="text/babel" src="components/Board.js"></script>
     <script type="text/babel" src="components/GameControls.js"></script>
-    <script type="text/babel" src="components/PlayerInfo.js"></script>
-    <script type="text/babel" src="components/GameSetup.js"></script>
+    <script type="text/babel" src="components/Timer.js"></script>
+    <script type="text/babel" src="components/HighScores.js"></script>
+    <script type="text/babel" src="components/Tutorial.js"></script>
+    <script type="text/babel" src="components/GameStats.js"></script>
+    <script type="text/babel" src="components/PlayerNameInput.js"></script>
 
     <!-- Game Logic -->
     <script type="text/babel" src="utils/gameLogic.js"></script>
+    <script type="text/babel" src="utils/scoring.js"></script>
+    <script type="text/babel" src="utils/storage.js"></script>
+    <script type="text/babel" src="utils/audio.js"></script>
 
     <!-- Main App -->
     <script type="text/babel" src="app.js"></script>
