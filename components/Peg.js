@@ -1,18 +1,7 @@
-function Peg({ filled, selected, validMove, onClick, position, playerArea }) {
+function Peg({ filled, selected, validMove, onClick, position }) {
     try {
-        const getPlayerColor = (area) => {
-            switch(area) {
-                case 1: return 'player-1'; // Top
-                case 2: return 'player-2'; // Bottom
-                case 3: return 'player-3'; // Left
-                case 4: return 'player-4'; // Right
-                case 0: return 'center'; // Center
-                default: return '';
-            }
-        };
-
         const pegClasses = `peg ${filled ? 'filled' : 'empty'} ${selected ? 'selected' : ''} 
-            ${validMove ? 'valid-move' : ''} ${getPlayerColor(playerArea)}`;
+            ${validMove ? 'valid-move' : ''}`;
         
         return (
             <div 
