@@ -1,21 +1,45 @@
 .game-container {
     min-height: 100vh;
     perspective: 1000px;
+    padding: 1rem;
 }
 
 .game-title {
     color: #ecf0f1;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     transform: translateZ(20px);
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .game-title {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+}
+
+.game-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .game-controls {
+        flex-direction: row;
+        justify-content: center;
+        gap: 2rem;
+    }
 }
 
 .game-controls button {
     transition: all 0.3s ease;
     transform-style: preserve-3d;
-}
-
-.game-controls button:hover {
-    transform: translateY(-2px) translateZ(5px);
+    width: 100%;
+    max-width: 200px;
 }
 
 .moves-counter {
@@ -29,6 +53,15 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.player-info {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -38,12 +71,4 @@
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.player-info {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
