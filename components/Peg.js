@@ -1,7 +1,6 @@
 function Peg({ filled, selected, validMove, onClick, position }) {
     try {
-        const pegClasses = `peg ${filled ? 'filled' : 'empty'} ${selected ? 'selected' : ''} 
-            ${validMove ? 'valid-move' : ''}`;
+        const pegClasses = `peg ${filled ? 'filled' : 'empty'} ${selected ? 'selected' : ''}`;
         
         return (
             <div 
@@ -10,6 +9,7 @@ function Peg({ filled, selected, validMove, onClick, position }) {
                 onClick={() => onClick(position)}
                 role="button"
                 aria-label={`Peg at position ${position}`}
+                data-valid-move={validMove}
             />
         );
     } catch (error) {
