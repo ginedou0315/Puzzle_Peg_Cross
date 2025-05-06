@@ -29,6 +29,12 @@
     border-radius: 6px;
     color: white;
     font-size: 0.875rem;
+    transition: transform 0.2s ease;
+}
+
+.score-item:hover {
+    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 @media (min-width: 768px) {
@@ -61,11 +67,16 @@
 .score-item .time {
     font-family: 'Courier New', monospace;
     font-weight: bold;
-    color: #2ecc71;
+    color: #f1c40f;
     margin-right: 1rem;
 }
 
 .score-item .moves {
-    color: #e74c3c;
+    color: #2ecc71;
     font-weight: bold;
+}
+
+.high-scores-container .text-sm {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
 }
