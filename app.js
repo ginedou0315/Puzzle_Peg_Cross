@@ -10,20 +10,15 @@ function App() {
         const [showTutorial, setShowTutorial] = React.useState(true);
         const [startTime, setStartTime] = React.useState(null);
         const [elapsedTime, setElapsedTime] = React.useState(0);
-        const [highScores, setHighScores] = React.useState([]);
+        const [fastestScores, setFastestScores] = React.useState([]);
         const [moveHistory, setMoveHistory] = React.useState([]);
         const [undoCount, setUndoCount] = React.useState(0);
-        const [showPurchaseModal, setShowPurchaseModal] = React.useState(false);
-        const [purchasedUndos, setPurchasedUndos] = React.useState(0);
-        const [paymentProcessing, setPaymentProcessing] = React.useState(false);
         const [hammerCount, setHammerCount] = React.useState(3);
         const [isHammerActive, setIsHammerActive] = React.useState(false);
-        const [showHammerPurchaseModal, setShowHammerPurchaseModal] = React.useState(false);
-        const [purchasedHammers, setPurchasedHammers] = React.useState(0);
 
         // Effects
         React.useEffect(() => {
-            fetchHighScores();
+            fetchScores();
         }, []);
 
         React.useEffect(() => {
@@ -56,6 +51,22 @@ function App() {
             setIsHammerActive(false);
         };
 
+        // Fetch scores
+        const fetchScores = async () => {
+            try {
+                const response = await trickleListObjects('pegs-cross-scores', 10, true);
+                const scores = response.items.map(item => ({
+                    name: item.objectData.name,
+                    moves: item.objectData.moves,
+                    time: item.objectData.time
+                })).sort((a, b) => a.time - b.time); // Sort by fastest time first
+                setFastestScores(scores);
+            } catch (error) {
+                console.error('Error fetching scores:', error);
+                setFastestScores([]); // Set empty array on error
+            }
+        };
+
         // Game start handler
         const handleStartGame = (e) => {
             try {
@@ -70,24 +81,6 @@ function App() {
             } catch (error) {
                 console.error('Error starting game:', error);
                 reportError(error);
-            }
-        };
-
-        // Fetch high scores from global leaderboard
-        const fetchHighScores = async () => {
-            try {
-                // Use a fixed objectType for all servers
-                const response = await trickleListObjects('global-pegs-cross-scores', 10, false);
-                const scores = response.items.map(item => ({
-                    name: item.objectData.name,
-                    moves: item.objectData.moves,
-                    time: item.objectData.time
-                }));
-                // Sort by time in descending order (slowest first)
-                const sortedScores = scores.sort((a, b) => b.time - a.time);
-                setHighScores(sortedScores);
-            } catch (error) {
-                console.error('Error fetching high scores:', error);
             }
         };
 
@@ -165,13 +158,12 @@ function App() {
             playWinSound();
             
             try {
-                // Save score to global leaderboard
-                await trickleCreateObject('global-pegs-cross-scores', {
+                await trickleCreateObject('pegs-cross-scores', {
                     name: playerName,
                     moves: moves,
                     time: finalTime
                 });
-                await fetchHighScores();
+                await fetchScores();
             } catch (error) {
                 console.error('Error saving score:', error);
             }
@@ -222,11 +214,15 @@ function App() {
                             </button>
                         </form>
                         
-                        {highScores.length > 0 && (
-                            <div className="w-full max-w-screen-xl">
-                                <HighScores scores={highScores} />
-                            </div>
-                        )}
+                        <div className="w-full max-w-screen-lg mx-auto flex flex-col items-center gap-8">
+                            {fastestScores.length > 0 && (
+                                <HighScores 
+                                    scores={fastestScores} 
+                                    title="Top Fastest Players"
+                                    description="Ranked by fastest completion time"
+                                />
+                            )}
+                        </div>
                     </div>
                 ) : (
                     <div data-name="game-content" className="flex flex-col items-center mt-8">
@@ -261,11 +257,15 @@ function App() {
                             </div>
                         </div>
 
-                        {highScores.length > 0 && (
-                            <div className="mt-8 w-full max-w-screen-xl">
-                                <HighScores scores={highScores} />
-                            </div>
-                        )}
+                        <div className="mt-8 w-full max-w-screen-lg mx-auto flex flex-col items-center gap-8">
+                            {fastestScores.length > 0 && (
+                                <HighScores 
+                                    scores={fastestScores} 
+                                    title="Top Fastest Players"
+                                    description="Ranked by fastest completion time"
+                                />
+                            )}
+                        </div>
                     </div>
                 )}
 
