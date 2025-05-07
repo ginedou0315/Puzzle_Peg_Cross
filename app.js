@@ -59,11 +59,11 @@ function App() {
                     name: item.objectData.name,
                     moves: item.objectData.moves,
                     time: item.objectData.time
-                })).sort((a, b) => a.time - b.time); // Sort by fastest time first
+                })).sort((a, b) => a.time - b.time);
                 setFastestScores(scores);
             } catch (error) {
                 console.error('Error fetching scores:', error);
-                setFastestScores([]); // Set empty array on error
+                setFastestScores([]);
             }
         };
 
@@ -118,6 +118,8 @@ function App() {
 
                         if (checkWin(newBoard)) {
                             handleWin();
+                        } else if (checkGameOver(newBoard)) {
+                            handleGameOver();
                         }
                     }
                     return;
@@ -138,6 +140,8 @@ function App() {
 
                     if (checkWin(newBoard)) {
                         handleWin();
+                    } else if (checkGameOver(newBoard)) {
+                        handleGameOver();
                     }
                 } else if (board[position].filled) {
                     setSelectedPeg(position);
@@ -150,6 +154,17 @@ function App() {
             } catch (error) {
                 console.error('Error in handlePegClick:', error);
                 reportError(error);
+            }
+        };
+
+        const handleGameOver = () => {
+            playInvalidSound();
+            alert("Game Over! No more valid moves available. Try again!");
+            const playAgain = window.confirm("Would you like to restart the game?");
+            if (playAgain) {
+                resetGame();
+            } else {
+                setGameStarted(false);
             }
         };
 
@@ -235,7 +250,7 @@ function App() {
                         </div>
 
                         <div data-name="board-container" className="bg-gray-800 rounded-xl shadow-2xl p-8">
-                            <h1 className="game-board-title">Puzzle Pegs Cross Game</h1>
+                            <h1 className="game-title text-white mb-6">Puzzle Pegs Cross Game</h1>
                             <Board
                                 board={board}
                                 selectedPeg={selectedPeg}
@@ -243,7 +258,7 @@ function App() {
                                 onPegClick={handlePegClick}
                                 isHammerActive={isHammerActive}
                             />
-                            <div className="mt-6 px-8 pb-6">
+                            <div className="mt-6">
                                 <GameControls
                                     moves={moves}
                                     onReset={resetGame}
